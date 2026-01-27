@@ -1,0 +1,4 @@
+Asset,Sharpe Ratio,VaR (95%),Outlier Count
+BND,0.01,-0.0048,32
+SPY,0.69,-0.0167,39
+TSLA,0.79,-0.0525,44
