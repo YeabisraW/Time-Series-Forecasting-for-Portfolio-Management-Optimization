@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from statsmodels.tsa.arima.model import ARIMA
 from pmdarima import auto_arima
 from sklearn.preprocessing import MinMaxScaler
@@ -92,3 +93,17 @@ print("\n--- Model Comparison Table ---")
 print(performance)
 performance.to_csv("data/processed/model_comparison.csv", index=False)
 print("Comparison table saved to data/processed/")
+# Assuming 'true_vals', 'arima_vals', and 'lstm_vals' are available from Task 2
+plt.figure(figsize=(14, 7))
+
+# Plotting the last 100 days for clarity
+plt.plot(true_vals[-100:], label="Actual Price", color='black', linewidth=2)
+plt.plot(lstm_vals[-100:], label="LSTM Prediction", color='blue', linestyle='--')
+plt.plot(arima_vals[-100:], label="ARIMA Prediction", color='red', linestyle=':')
+
+plt.title("Figure 3: TSLA Price Prediction Comparison (Test Set)", fontsize=14)
+plt.xlabel("Days")
+plt.ylabel("Price (USD)")
+plt.legend()
+plt.savefig("data/processed/model_comparison.png", dpi=300)
+plt.show()
