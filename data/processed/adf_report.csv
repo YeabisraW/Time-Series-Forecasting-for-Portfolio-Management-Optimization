@@ -1,0 +1,7 @@
+Asset,ADF Statistic,p-value,1% Crit,5% Crit,Stationary
+BND Price,-1.0514,0.7341,-3.4327,-2.8626,No
+BND Return,-10.4337,0.0,-3.4327,-2.8626,Yes
+SPY Price,1.1709,0.9958,-3.4327,-2.8626,No
+SPY Return,-17.2288,0.0,-3.4327,-2.8626,Yes
+TSLA Price,-0.7802,0.8249,-3.4327,-2.8626,No
+TSLA Return,-53.0196,0.0,-3.4327,-2.8626,Yes

@@ -2,86 +2,46 @@ import streamlit as st
 import pandas as pd
 import os
 
-st.set_page_config(page_title="GMF Portfolio Analytics", layout="wide")
+st.set_page_config(page_title="Portfolio Optimization", layout="wide")
 
-st.title("📊 GMF Investments: Financial AI Dashboard")
-st.markdown("---")
+# Sidebar Navigation
+page = st.sidebar.selectbox("Go to", ["Project Overview", "Market Analysis", "Model Accuracy"])
 
-# Sidebar
-st.sidebar.header("Navigation")
-page = st.sidebar.radio("Jump to Section", ["Executive Summary", "Market Analysis", "Model Accuracy", "Portfolio Optimization"])
+# 1. Project Overview
+if page == "Project Overview":
+    st.header("Financial Engineering & Deep Learning Pipeline")
+    st.write("This dashboard presents a predictive approach to asset management.")
 
-# Helper function to display images safely
-def display_image(path, caption):
-    if os.path.exists(path):
-        st.image(path, caption=caption, width='stretch')
-    else:
-        st.warning(f"File not found: {path}. Please run your scripts to generate this figure.")
-
-# 1. Executive Summary
-if page == "Executive Summary":
-    st.header("Strategic Portfolio Overview")
-    col1, col2 = st.columns([1, 2])
-    with col1:
-        st.metric(label="Primary Asset", value="TSLA", delta="High Growth/Vol")
-        st.write("""
-        This project utilizes LSTM networks to forecast Tesla's price movements, 
-        balancing them with BND and SPY to optimize the Sharpe Ratio.
-        """)
-    with col2:
-        display_image("data/processed/price_history.png", "Historical Asset Trends")
-
-# 2. Market Analysis (Task 1)
+# 2. Market Analysis (Consolidated and Corrected)
 elif page == "Market Analysis":
-    st.header("Exploratory Data Analysis & Risk")
+    st.header("Advanced Risk & Forecasting")
     
-    # Add a Risk Metrics Table
-    st.subheader("Asset Risk Profiles")
-    risk_data = {
-        "Metric": ["Annualized Volatility", "95% Value at Risk (VaR)", "Sharpe Ratio"],
-        "TSLA": ["57.6%", "-4.2%", "0.63"],
-        "SPY": ["17.8%", "-1.5%", "0.76"],
-        "BND": ["5.4%", "-0.4%", "0.35"]
-    }
-    st.table(pd.DataFrame(risk_data))
-    st.info("**Note:** VaR represents the potential loss over a 1-day period with 95% confidence.")
+    # --- Addressing Comment #3 (Backtesting) ---
+    st.subheader("Out-of-Sample Performance (OOS)")
+    if os.path.exists("data/processed/backtest_metrics_table.csv"):
+        metrics_df = pd.read_csv("data/processed/backtest_metrics_table.csv")
+        st.table(metrics_df)
+        st.caption("Metrics calculated on a strict 20% hold-out window.")
+    else:
+        st.warning("Backtest metrics table missing.")
 
-    tab1, tab2 = st.tabs(["Volatility", "Outlier Detection"])
-    # ... (rest of your existing tab code)
+    # --- Addressing Comment #2 (Forecasting) ---
+    st.subheader("TSLA 12-Month Predictive Forecast")
+    if os.path.exists("data/processed/future_forecast_ci.png"):
+        st.image("data/processed/future_forecast_ci.png", caption="LSTM Prediction with 95% Confidence Intervals")
+    else:
+        st.info("Forecast image not found. Please run the forecasting script.")
 
-# 3. Model Accuracy (Task 2)
+    # --- Addressing Comment #1 (Stationarity) ---
+    with st.expander("Show Statistical Proof (ADF Tests)"):
+        if os.path.exists("data/processed/adf_report.csv"):
+            adf_df = pd.read_csv("data/processed/adf_report.csv")
+            st.dataframe(adf_df)
+        else:
+            st.error("ADF report not found.")
+
+# 3. Model Accuracy (Line 60 was here)
 elif page == "Model Accuracy":
-    st.header("LSTM vs. ARIMA Performance")
-    display_image("data/processed/model_comparison.png", "Price Prediction Comparison")
-    st.info("The LSTM model successfully captured non-linear trends, achieving a MAPE of 5.81%.")
-
-# 4. Portfolio Optimization (Task 3)
-elif page == "Portfolio Optimization":
-    st.header("Modern Portfolio Theory Results")
-    if os.path.exists("data/processed/portfolio_weights.csv"):
-        weights = pd.read_csv("data/processed/portfolio_weights.csv")
-        st.subheader("Maximum Sharpe Ratio Allocation")
-        # Format weights as percentages
-        st.dataframe(weights.style.format("{:.2%}"))
-    
-    display_image("data/processed/efficient_frontier.png", "The Efficient Frontier")
- # 5. Backtesting (Task 5)
-elif page == "Portfolio Optimization": # You can also create a new 'Backtesting' radio option
-    # ... existing code ...
-    st.markdown("---")
-    st.header("Task 5: Strategy Backtesting")
-    display_image("data/processed/backtest_results.png", "Cumulative Returns vs Benchmark")
-# --- Footer & Export ---
-st.sidebar.markdown("---")
-if st.sidebar.button("Generate Final Report Data"):
-    # Combine results into one summary dataframe
-    if os.path.exists("data/processed/portfolio_weights.csv"):
-        weights = pd.read_csv("data/processed/portfolio_weights.csv")
-        csv = weights.to_csv(index=False).encode('utf-8')
-        st.sidebar.download_button(
-            label="Download Optimal Weights CSV",
-            data=csv,
-            file_name='GMF_Optimal_Weights.csv',
-            mime='text/csv',
-        )
-        st.sidebar.success("Report Generated!")    
+    st.header("Model Performance Metrics")
+    st.write("Comparison of ARIMA vs LSTM performance.")
+    # Add your existing model metrics plots here
